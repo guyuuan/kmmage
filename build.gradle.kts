@@ -20,8 +20,9 @@ allprojects {
     group = "cn.chitanda"
     version = "0.0-alpha"
     repositories {
-        google()
         mavenCentral()
+        google()
+        gradlePluginPortal()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }

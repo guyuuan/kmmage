@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ComposePlugin.Dependencies.desktop
 import org.jetbrains.compose.compose
 
 plugins {
@@ -19,6 +20,9 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+                api(compose.ui)
+                api(compose.material)
+                implementation(libs.ktor.core)
             }
         }
         val commonTest by getting {
@@ -28,8 +32,10 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.appcompat:appcompat:1.2.0")
-                api("androidx.core:core-ktx:1.3.1")
+                api(libs.androidx.appcompat)
+                api(libs.androidx.core)
+                implementation(libs.ktor.android)
+                implementation(libs.ktor.cio)
             }
         }
         val androidTest by getting {
@@ -39,7 +45,8 @@ kotlin {
         }
         val desktopMain by getting {
             dependencies {
-                api(compose.preview)
+                implementation(libs.ktor.core)
+                implementation(libs.ktor.cio)
             }
         }
         val desktopTest by getting
@@ -47,11 +54,11 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(31)
+    compileSdk = libs.versions.compileSdk.get().toInt()
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(31)
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
