@@ -5,18 +5,20 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_version}")
-        classpath("com.android.tools.build:gradle:4.1.3")
+        classpath(libs.gradleplugin.kotlin)
+        classpath(libs.gradleplugin.android)
     }
 }
-plugins{
-    kotlin("multiplatform") version Versions.kotlin_version apply  false
-    id("org.jetbrains.compose") version  Versions.compose_version apply false
+
+plugins {
+//    kotlin("multiplatform") version libs.versions.kotlin apply false
+    kotlin("multiplatform") version libs.versions.kotlin apply  false
+    alias(libs.plugins.jetbarins.compose) apply  false
 }
-group = "me.chunjinchen"
-version = "1.0"
 
 allprojects {
+    group = "cn.chitanda"
+    version = "0.0-alpha"
     repositories {
         google()
         mavenCentral()

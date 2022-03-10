@@ -1,11 +1,11 @@
 plugins {
-    id("org.jetbrains.compose")
+     id(libs.plugins.jetbarins.compose.get().pluginId)
     id("com.android.application")
     kotlin("android")
 }
 
-group = "me.chunjinchen"
-version = "1.0"
+group = "cn.chitanda"
+version = "0.0-alpha"
 
 
 dependencies {
@@ -14,14 +14,14 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(31)
+    compileSdk = libs.versions.compileSdk.get().toInt()
+
     defaultConfig {
-        applicationId = "me.chunjinchen.android"
-        minSdkVersion(24)
-        targetSdkVersion(31)
+        applicationId = "cn.chitanda.kmmage.android"
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
-
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -32,5 +32,4 @@ android {
             isMinifyEnabled = false
         }
     }
-
 }

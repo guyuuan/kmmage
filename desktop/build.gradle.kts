@@ -3,11 +3,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose")
+     id(libs.plugins.jetbarins.compose.get().pluginId)
 }
-
-group = "me.chunjinchen"
-version = "1.0"
 
 kotlin {
     jvm {

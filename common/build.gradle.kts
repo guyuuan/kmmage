@@ -2,18 +2,15 @@ import org.jetbrains.compose.compose
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    id(libs.plugins.jetbarins.compose.get().pluginId)
     id("com.android.library")
 }
-
-group = "me.chunjinchen"
-version = "1.0"
 
 kotlin {
     android()
     jvm("desktop") {
         compilations.all {
-            kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
+            kotlinOptions.jvmTarget = "11"
         }
     }
     sourceSets {
@@ -31,8 +28,8 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.appcompat:appcompat:1.4.1")
-                api("androidx.core:core-ktx:1.7.0")
+                api("androidx.appcompat:appcompat:1.2.0")
+                api("androidx.core:core-ktx:1.3.1")
             }
         }
         val androidTest by getting {
