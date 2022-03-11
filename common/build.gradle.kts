@@ -1,10 +1,10 @@
-import org.jetbrains.compose.ComposePlugin.Dependencies.desktop
 import org.jetbrains.compose.compose
 
 plugins {
     kotlin("multiplatform")
     id(libs.plugins.jetbarins.compose.get().pluginId)
     id("com.android.library")
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -23,6 +23,7 @@ kotlin {
                 api(compose.ui)
                 api(compose.material)
                 implementation(libs.ktor.core)
+                implementation(libs.okio)
             }
         }
         val commonTest by getting {
@@ -40,7 +41,7 @@ kotlin {
         }
         val androidTest by getting {
             dependencies {
-                implementation("junit:junit:4.13")
+                implementation("junit:junit:4.13.2")
             }
         }
         val desktopMain by getting {

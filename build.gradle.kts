@@ -14,6 +14,7 @@ plugins {
 //    kotlin("multiplatform") version libs.versions.kotlin apply false
     kotlin("multiplatform") version libs.versions.kotlin apply  false
     alias(libs.plugins.jetbarins.compose) apply  false
+    kotlin("plugin.serialization") version libs.versions.kotlin apply  false
 }
 
 allprojects {
