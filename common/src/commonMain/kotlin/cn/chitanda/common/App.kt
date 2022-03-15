@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import cn.chitanda.common.http.Api
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.nio.file.FileSystem
 
 @Composable
 fun App() {
@@ -24,7 +25,7 @@ fun App() {
     var image by remember { mutableStateOf<ImageBitmap?>(null) }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         image?.let { Image(bitmap = it, contentScale = ContentScale.Crop,contentDescription = null, modifier = Modifier.fillMaxSize(),) }
-//        Text(html, modi fier = Modifier.verticalScroll(state = rememberScrollState()))
+        Text("tmpdir = ${System.getProperty("java.io.tmpdir")} ",modifier = Modifier.align(Alignment.BottomCenter))
         Button(onClick = {
             text = "Hello, ${getPlatformName()}"
             coroutineScope.launch(Dispatchers.IO) {

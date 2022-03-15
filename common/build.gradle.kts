@@ -1,17 +1,17 @@
 import org.jetbrains.compose.compose
-
+@Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
     kotlin("multiplatform")
-    id(libs.plugins.jetbarins.compose.get().pluginId)
     id("com.android.library")
-    kotlin("plugin.serialization")
+    id(libs.plugins.jetbarins.compose.get().pluginId)
+    kotlin("plugin.serialization") apply  true
 }
 
 kotlin {
     android()
     jvm("desktop") {
         compilations.all {
-            kotlinOptions.jvmTarget = "11"
+            kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
         }
     }
     sourceSets {
@@ -24,6 +24,9 @@ kotlin {
                 api(compose.material)
                 implementation(libs.ktor.core)
                 implementation(libs.okio)
+                implementation(libs.coroutines.core)
+                implementation("androidx.annotation:annotation:1.3.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2")
             }
         }
         val commonTest by getting {
