@@ -4,7 +4,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id(libs.plugins.jetbarins.compose.get().pluginId)
-    kotlin("plugin.serialization") apply  true
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -54,6 +54,10 @@ kotlin {
             }
         }
         val desktopTest by getting
+
+        all {
+            languageSettings.optIn("kotlin.RequiresOptIn")
+        }
     }
 }
 

@@ -1,12 +1,3 @@
-pluginManagement {
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    }
-    
-}
 rootProject.name = "kmmage"
 
 
@@ -15,3 +6,11 @@ include(":desktop")
 include(":common")
 
 enableFeaturePreview("VERSION_CATALOGS")
+pluginManagement {
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
+}
