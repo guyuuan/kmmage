@@ -270,7 +270,7 @@ class DiskLruCache(
             return null //entry is editing
         }
 
-        if (entry != null && entry?.lockingSnapshotCount != 0) {
+        if (entry != null && entry.lockingSnapshotCount != 0) {
             return null // can't edit this entry because a reader is still reading it
         }
 
@@ -548,6 +548,12 @@ class DiskLruCache(
 
     inner class Snapshot(val entry: Entry) : Closeable {
         private var closed = false
+
+        fun file(index: Int): Path {
+            check(!closed) { "snapshot is closed" }
+            return entry.cleanFiles[index]
+        }
+
         override fun close() {
             if (!closed) {
                 closed = true

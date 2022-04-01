@@ -12,10 +12,10 @@ import okio.Path
 interface DiskCache {
 
     /** The current size of the cache in bytes */
-    val size: Int
+    val size: Long
 
     /** The max size of the cache in bytes */
-    val maxSize: Int
+    val maxSize: Long
 
     /** The directory where the cache store its data */
     val directory: Path
@@ -31,6 +31,9 @@ interface DiskCache {
 
     /** Delete the entry reference by [key] */
     fun remove(key: String): Boolean
+
+    /** Delete all entries */
+    fun clear()
 
 
     /**
@@ -61,10 +64,10 @@ interface DiskCache {
         val data: Path
 
         /** commit edit so the change can be visible by readers */
-         fun commit()
+        fun commit()
 
         /** commit edit and return a new [Snapshot] for this entry atomically */
-        fun commitAndGet(): Editor?
+        fun commitAndGet(): Snapshot?
 
         /** Abort the edit. Any written data will be discarded. */
         fun abort()
