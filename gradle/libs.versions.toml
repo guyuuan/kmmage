@@ -5,7 +5,7 @@ targetSdk = "31"
 
 gradlePlugin = "7.1.2"
 kotlin = "1.6.10"
-compose = "1.1.0"
+compose = "1.1.1"
 activity-compose = "1.4.0"
 compose_md3 = "1.0.0-alpha05"
 androidx-navigation = "2.4.0-rc01"
