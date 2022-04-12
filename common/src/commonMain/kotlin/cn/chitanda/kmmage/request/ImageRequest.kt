@@ -1,8 +1,5 @@
 package cn.chitanda.kmmage.request
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.ImageBitmapConfig
 import cn.chitanda.kmmage.memory.MemoryCache

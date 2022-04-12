@@ -1,6 +1,6 @@
 package cn.chitanda.kmmage.request
 
-import android.graphics.drawable.Drawable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageBitmapConfig
 import cn.chitanda.kmmage.size.Precision
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,9 +21,9 @@ open class DefaultRequestOptions(
     val bitmapConfig: ImageBitmapConfig = ImageBitmapConfig.Argb8888,
     val allowHardware: Boolean = true,
     val allowRgb565: Boolean = false,
-    val placeholder: Drawable? = null,
-    val error: Drawable? = null,
-    val fallback: Drawable? = null,
+    val placeholder: ImageBitmap? = null,
+    val error: ImageBitmap? = null,
+    val fallback: ImageBitmap? = null,
     val memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
     val diskCachePolicy: CachePolicy = CachePolicy.ENABLED,
     val networkCachePolicy: CachePolicy = CachePolicy.ENABLED,
@@ -39,9 +39,9 @@ open class DefaultRequestOptions(
         bitmapConfig: ImageBitmapConfig = this.bitmapConfig,
         allowHardware: Boolean = this.allowHardware,
         allowRgb565: Boolean = this.allowRgb565,
-        placeholder: Drawable? = this.placeholder,
-        error: Drawable? = this.error,
-        fallback: Drawable? = this.fallback,
+        placeholder: ImageBitmap? = this.placeholder,
+        error: ImageBitmap? = this.error,
+        fallback: ImageBitmap? = this.fallback,
         memoryCachePolicy: CachePolicy = this.memoryCachePolicy,
         diskCachePolicy: CachePolicy = this.diskCachePolicy,
         networkCachePolicy: CachePolicy = this.networkCachePolicy,
