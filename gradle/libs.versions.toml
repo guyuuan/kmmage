@@ -3,7 +3,7 @@ compileSdk = "31"
 minSdk = "23"
 targetSdk = "31"
 
-gradlePlugin = "7.1.3"
+agp = "7.1.3"
 kotlin = "1.6.10"
 compose = "1.1.1"
 activity-compose = "1.4.0"
@@ -27,12 +27,13 @@ statusbar = "2.5.3"
 permissionx = "1.6.1"
 ktor = "2.0.0-beta-1"
 okio = "3.0.0"
-serialization="1.3.2"
+serialization = "1.3.2"
+dagger = "2.40.5"
 
 [libraries]
-gradleplugin-android = "com.android.tools.build:gradle:7.1.2"
-gradleplugin-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-gradleplugin-dagger = "com.google.dagger:hilt-android-gradle-plugin:2.40.5"
+gradleplugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+gradleplugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
+gradleplugin-dagger = {module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger" }
 #
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -92,3 +93,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbarins-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin" }
+android_app = {id = "com.android.application",version.ref = "agp"}
+android_lib = {id = "com.android.library",version.ref = "agp"}
