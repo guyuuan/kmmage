@@ -4,5 +4,5 @@ import androidx.compose.ui.graphics.ImageBitmap
 import io.ktor.client.engine.*
 
 expect fun getPlatformName(): String
-internal expect val KtorEngine: HttpClientEngineFactory<out HttpClientEngineConfig>
+internal expect val KtorEngine: HttpClientEngineFactory<HttpClientEngineConfig>
 internal expect fun ByteArray.toImageBitmap(): ImageBitmap

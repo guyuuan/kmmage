@@ -2,12 +2,16 @@ package cn.chitanda.common.http
 
 import cn.chitanda.common.KtorEngine
 import cn.chitanda.common.toImageBitmap
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.url
+import io.ktor.client.statement.bodyAsChannel
+import io.ktor.util.cio.writeChannel
+import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /**
  * @author: Chen
@@ -26,7 +30,6 @@ object Api {
         val response = client.get {
             url(address)
         }
-
         val ba: ByteArray = response.body()
         ba.toImageBitmap()
     }
