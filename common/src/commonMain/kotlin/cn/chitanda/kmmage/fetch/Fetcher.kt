@@ -1,5 +1,6 @@
 package cn.chitanda.kmmage.fetch
 
+import cn.chitanda.kmmage.ImageLoader
 import cn.chitanda.kmmage.request.Options
 
 /**
@@ -11,6 +12,6 @@ fun interface Fetcher {
     suspend  fun fetch():FetchResult?
 
     fun interface Factory<T>{
-        fun create(data:T,options: Options)
+        fun create(data: T, options: Options, imageLoader: ImageLoader): Fetcher?
     }
 }

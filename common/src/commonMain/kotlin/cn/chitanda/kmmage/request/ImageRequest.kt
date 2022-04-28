@@ -62,6 +62,7 @@ class ImageRequest private constructor(
         private var listener: Listener? = null
         private var options: DefaultRequestOptions = DefaultRequestOptions()
 
+        constructor()
         constructor(imageRequest: ImageRequest) {
             data = imageRequest.data
             precision = imageRequest.precision

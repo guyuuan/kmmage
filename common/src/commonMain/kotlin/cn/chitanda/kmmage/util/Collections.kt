@@ -59,3 +59,12 @@ internal inline fun <K, V, R : Any> Map<K, V>.mapNotNullValues(
     }
     return destination
 }
+
+internal fun <T> List<T>.indexOfElement(element: T,startIndex:Int =0):Int{
+    for (i in startIndex until size) {
+        if (this[i] == element) {
+            return i
+        }
+    }
+    return size
+}
