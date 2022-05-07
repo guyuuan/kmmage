@@ -29,10 +29,5 @@ object Api {
             ImageRequest.Builder().data(address).build(),
             options = Options()
         ).bitmap
-//        val response = client.get {
-//            url(address)
-//        }
-//        val ba: ByteArray = response.body()
-//        ba.toImageBitmap()
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import io.ktor.client.engine.*
 import io.ktor.client.engine.cio.*
+import okio.BufferedSource
 
 actual fun getPlatformName(): String {
     return "Android"
@@ -12,6 +13,6 @@ actual fun getPlatformName(): String {
 
 internal actual val KtorEngine: HttpClientEngineFactory<HttpClientEngineConfig> = CIO
 
-internal actual fun ByteArray.toImageBitmap(): ImageBitmap {
-   return BitmapFactory.decodeByteArray(this, 0, size).asImageBitmap()
+internal actual fun BufferedSource.toImageBitmap(): ImageBitmap {
+   return BitmapFactory.decodeStream(buffer.inputStream()).asImageBitmap()
 }

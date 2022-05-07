@@ -51,10 +51,10 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.core)
                 implementation(libs.ktor.cio)
+                implementation(libs.thumbnailator)
             }
         }
         val desktopTest by getting
-
         all {
             languageSettings.optIn("kotlin.RequiresOptIn")
         }
@@ -69,7 +69,7 @@ android {
         targetSdk = libs.versions.targetSdk.get().toInt()
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }

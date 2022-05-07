@@ -2,6 +2,7 @@ package cn.chitanda.kmmage.util
 
 import cn.chitanda.kmmage.disk.DiskCache
 import io.ktor.http.ContentType
+import io.ktor.http.Url
 import java.io.Closeable
 
 /**
@@ -46,5 +47,8 @@ fun String?.toNonNegativeInt(defaultValue: Int): Int {
 internal fun DiskCache.Editor.abortQuietly() {
     try {
         abort()
-    } catch (_: Exception) {}
+    } catch (_: Exception) {
+    }
 }
+
+internal const val ASSET_FILE_PATH_ROOT = "android_asset"

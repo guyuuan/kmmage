@@ -10,6 +10,7 @@ version = "0.0-alpha"
 
 dependencies {
     implementation(project(":common"))
+    implementation(libs.ktor.android)
     implementation("androidx.activity:activity-compose:1.4.0")
 }
 

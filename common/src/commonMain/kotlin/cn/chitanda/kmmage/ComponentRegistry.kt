@@ -72,6 +72,8 @@ class ComponentRegistry private constructor(
         return null
     }
 
+    fun newBuilder(): Builder = Builder(this)
+
     class Builder {
 
         internal val interceptors: MutableList<Interceptor>
