@@ -21,4 +21,7 @@ internal val ImageBitmapConfig.bytesPerPixel: Int
         else -> 4
     }
 
+internal val ImageBitmapConfig.isHardware: Boolean
+    get() = this == ImageBitmapConfig.Gpu
 
+internal expect val VALID_TRANSFORMATION_CONFIGS :Array<ImageBitmapConfig>

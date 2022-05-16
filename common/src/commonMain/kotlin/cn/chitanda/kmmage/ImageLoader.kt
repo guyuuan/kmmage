@@ -27,32 +27,34 @@ interface ImageLoader {
     suspend fun request(request: ImageRequest, options: Options): ImageResult
 
     fun newBuilder(): Builder
-    class Builder {
+    class Builder() {
         private var defaults: DefaultRequestOptions = DefaultRequestOptions()
         private var memoryCache: Lazy<MemoryCache?>? = null
         private var diskCache: Lazy<DiskCache?>? = null
-        private var httpClientlFactoryLazy: Lazy<HttpClient>? = null
+        private var httpClientFactoryLazy: Lazy<HttpClient>? = null
         private var eventListenerFactory: EventListener.Factory? = null
         private var componentRegistry: ComponentRegistry? = null
         private var options: ImageLoaderOptions = ImageLoaderOptions()
 
-        internal constructor(imageLoader: RealImageLoader) {
+        internal constructor(imageLoader: RealImageLoader) : this() {
             defaults = imageLoader.defaults
             memoryCache = imageLoader.memoryCacheLazy
             diskCache = imageLoader.diskCacheLazy
-            httpClientlFactoryLazy = imageLoader.httpClientlFactoryLazy
+            httpClientFactoryLazy = imageLoader.httpClientFactoryLazy
             eventListenerFactory = imageLoader.eventListenerFactory
             componentRegistry = imageLoader.componentRegistry
             options = imageLoader.options
         }
 
-        fun build(): ImageLoader = RealImageLoader(defaults = defaults,
+        fun build(): ImageLoader = RealImageLoader(
+            defaults = defaults,
             memoryCacheLazy = memoryCache ?: lazy { MemoryCache.Builder().build() },
             diskCacheLazy = diskCache ?: lazy { SingletonDiskCache.get() },
-            httpClientlFactoryLazy = httpClientlFactoryLazy ?: lazy { HttpClient() },
+            httpClientFactoryLazy = httpClientFactoryLazy ?: lazy { HttpClient() },
             eventListenerFactory = eventListenerFactory ?: EventListener.Factory.NONE,
             componentRegistry = componentRegistry ?: ComponentRegistry(),
-            options = options,)
+            options = options
+        )
 
     }
 }

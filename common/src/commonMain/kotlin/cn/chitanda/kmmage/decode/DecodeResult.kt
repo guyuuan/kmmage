@@ -9,5 +9,5 @@ import androidx.compose.ui.graphics.ImageBitmap
  **/
 data class DecodeResult(
     val bitmap: ImageBitmap,
-    val isSample: Boolean
+    val isSampled: Boolean
 )

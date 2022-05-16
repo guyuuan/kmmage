@@ -48,7 +48,7 @@ interface MemoryCache {
 
     data class Key(
         val key: String,
-        val extra: Map<String, String> = emptyMap()
+        val extras: Map<String, String> = emptyMap()
     )
 
     /**

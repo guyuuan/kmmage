@@ -37,7 +37,7 @@ class ComponentRegistry private constructor(
     fun key(data: Any, options: Options): String? {
         keyers.forEachIndices { (keyer, type) ->
             if (type.isAssignableFrom(data::class.java)) {
-                (keyers as Keyer<Any>).key(data, options)?.let { return it }
+                (keyer as Keyer<Any>).key(data, options)?.let { return it }
             }
         }
         return null

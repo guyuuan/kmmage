@@ -89,7 +89,7 @@ class SuccessResult(
 }
 
 class ErrorResult(
-    override val bitmap: ImageBitmap?,
+    override val bitmap: ImageBitmap? = null,
     override val request: ImageRequest,
     val throwable: Throwable
 ) : ImageResult() {

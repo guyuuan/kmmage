@@ -19,7 +19,7 @@ internal class RealImageLoader(
     override val defaults: DefaultRequestOptions,
     val memoryCacheLazy: Lazy<MemoryCache?>,
     val diskCacheLazy: Lazy<DiskCache?>,
-    val httpClientlFactoryLazy: Lazy<HttpClient>,
+    val httpClientFactoryLazy: Lazy<HttpClient>,
     val eventListenerFactory: EventListener.Factory,
     val componentRegistry: ComponentRegistry,
     val options: ImageLoaderOptions,

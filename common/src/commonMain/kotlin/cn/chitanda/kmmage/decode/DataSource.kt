@@ -8,6 +8,6 @@ package cn.chitanda.kmmage.decode
 enum class DataSource {
     DISK,
     MEMORY,
-    MEORY_CACH,
+    MEMORY_CACHE,
     NETWORK
 }

@@ -27,6 +27,6 @@ interface Interceptor {
         /**
          * continue executing the chain
          */
-        fun proceed(request: ImageRequest):ImageResult
+        suspend fun proceed(request: ImageRequest):ImageResult
     }
 }

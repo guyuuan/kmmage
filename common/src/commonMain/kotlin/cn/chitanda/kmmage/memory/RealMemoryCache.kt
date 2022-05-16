@@ -26,7 +26,7 @@ class RealMemoryCache(
         // weakMemoryCache.set() is called by strongMemoryCache when
         // a value is evicted from the strong reference cache.
         strongMemoryCache.set(
-            key = key.copy(extra = key.extra.toImmutableMap()),
+            key = key.copy(extras = key.extras.toImmutableMap()),
             value.bitmap,
             value.extras
         )

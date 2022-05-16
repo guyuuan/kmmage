@@ -15,7 +15,7 @@ class Size(val width: Dimension, val height: Dimension) {
         * A [Size] whose width and height use the source image original size
         * */
         @JvmField
-        val ORIGINAL = Size(Dimension.Original, Dimension.Original)
+        val ORIGINAL = Size(Dimension.Undefined, Dimension.Undefined)
     }
 
     val isOriginal: Boolean

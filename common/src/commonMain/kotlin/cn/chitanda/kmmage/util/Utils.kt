@@ -1,8 +1,13 @@
 package cn.chitanda.kmmage.util
 
+import cn.chitanda.kmmage.ComponentRegistry
+import cn.chitanda.kmmage.EventListener
+import cn.chitanda.kmmage.decode.Decoder
 import cn.chitanda.kmmage.disk.DiskCache
+import cn.chitanda.kmmage.fetch.Fetcher
+import cn.chitanda.kmmage.intercept.Interceptor
+import cn.chitanda.kmmage.intercept.RealInterceptorChain
 import io.ktor.http.ContentType
-import io.ktor.http.Url
 import java.io.Closeable
 
 /**
@@ -52,3 +57,20 @@ internal fun DiskCache.Editor.abortQuietly() {
 }
 
 internal const val ASSET_FILE_PATH_ROOT = "android_asset"
+
+internal val Interceptor.Chain.eventListener: EventListener
+    get() = if (this is RealInterceptorChain) eventListener else EventListener.NONE
+
+internal fun Int.isMinOrMax() = this == Int.MIN_VALUE || this == Int.MAX_VALUE
+internal val Interceptor.Chain.isPlaceholderCached: Boolean
+    get() = this is RealInterceptorChain && isPlaceholderCached
+
+internal inline fun ComponentRegistry.Builder.addFirst(
+    pair: Pair<Fetcher.Factory<out Any>, Class<out Any>>?
+) = apply {
+    if (pair != null) fetcherFactories.add(0, pair)
+}
+
+internal inline fun ComponentRegistry.Builder.addFirst(
+    factory: Decoder.Factory?
+) = apply { if (factory != null) decoderFactories.add(0, factory) }

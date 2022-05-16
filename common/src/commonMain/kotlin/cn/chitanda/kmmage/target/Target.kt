@@ -11,7 +11,7 @@ interface Target {
 
     fun onStart(placeholder: ImageBitmap?)
 
-    fun onEror(error:ImageBitmap?)
+    fun onError(error:ImageBitmap?)
 
     fun onSuccess(result:ImageBitmap)
 }
