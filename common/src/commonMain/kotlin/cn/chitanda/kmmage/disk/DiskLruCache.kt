@@ -26,7 +26,6 @@ import java.io.Flushable
  * @createTime: 2022/3/17 15:24
  * @description:
  **/
-@OptIn(ExperimentalCoroutinesApi::class)
 class DiskLruCache(
     fileSystem: FileSystem,
     cleanUpDispatcher: CoroutineDispatcher,

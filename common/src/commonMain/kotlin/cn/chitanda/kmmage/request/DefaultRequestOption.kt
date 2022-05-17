@@ -3,6 +3,7 @@ package cn.chitanda.kmmage.request
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageBitmapConfig
 import cn.chitanda.kmmage.size.Precision
+import cn.chitanda.kmmage.transition.Transition
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -16,7 +17,7 @@ open class DefaultRequestOptions(
     val fetcherDispatcher: CoroutineDispatcher = Dispatchers.IO,
     val decoderDispatcher: CoroutineDispatcher = Dispatchers.IO,
     val transformationDispatcher: CoroutineDispatcher = Dispatchers.IO,
-//    val transitionFactory: Transition.Factory = Transition.Factory.NONE,
+    val transitionFactory: Transition.Factory = Transition.Factory.NONE,
     val precision: Precision = Precision.AUTOMATIC,
     val bitmapConfig: ImageBitmapConfig = ImageBitmapConfig.Argb8888,
     val allowHardware: Boolean = true,

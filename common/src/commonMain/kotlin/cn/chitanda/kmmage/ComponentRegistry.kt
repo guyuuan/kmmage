@@ -28,9 +28,12 @@ class ComponentRegistry private constructor(
         var mappedData = data
         mappers.forEachIndices { (mapper, type) ->
             if (type.isAssignableFrom(mappedData::class.java)) {
-                (mapper as Mapper<Any, *>).map(mappedData, options)?.let { mappedData = it }
+                (mapper as Mapper<Any, *>).map(mappedData, options)?.let {
+                    mappedData = it
+                }
             }
         }
+
         return mappedData
     }
 

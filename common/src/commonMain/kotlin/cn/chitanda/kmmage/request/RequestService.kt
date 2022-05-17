@@ -5,11 +5,12 @@ import cn.chitanda.kmmage.ImageLoader
 import cn.chitanda.kmmage.size.Dimension
 import cn.chitanda.kmmage.size.Scale
 import cn.chitanda.kmmage.size.Size
-import cn.chitanda.kmmage.util.HardwareBitmapService
+import cn.chitanda.kmmage.util.HardwareBitmapServices
 import cn.chitanda.kmmage.util.SystemCallback
 import cn.chitanda.kmmage.util.VALID_TRANSFORMATION_CONFIGS
 import cn.chitanda.kmmage.util.allowInexactSize
 import cn.chitanda.kmmage.util.isHardware
+import kotlinx.coroutines.Job
 
 /**
  * @author: Chen
@@ -20,7 +21,11 @@ internal class RequestService(
     private val imageLoader: ImageLoader,
     private val systemCallback: SystemCallback
 ) {
-    private val hardwareBitmapService = HardwareBitmapService()
+    private val hardwareBitmapService = HardwareBitmapServices()
+
+    fun requestDelegate(initialRequest: ImageRequest, job: Job): RequestDelegate {
+        return RequestDelegate(initialRequest.lifecycle, job)
+    }
 
     fun options(request: ImageRequest, size: Size): Options {
         val isValidConfig = isConfigValidForTransformations(request) &&

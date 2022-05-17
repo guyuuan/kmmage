@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import java.io.File
 
-internal actual fun HardwareBitmapService(): HardwareBitmapService = when {
+internal actual fun HardwareBitmapServices(): HardwareBitmapService = when {
     Build.VERSION.SDK_INT < 26 || IS_DEVICE_BLOCKED -> ImmutableHardwareBitmapService(false)
     Build.VERSION.SDK_INT == 26 || Build.VERSION.SDK_INT == 27 -> LimitedFileDescriptorHardwareBitmapService(
         FileDescriptorCounter::hasAvailableFileDescriptors

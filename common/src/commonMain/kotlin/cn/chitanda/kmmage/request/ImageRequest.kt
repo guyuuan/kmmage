@@ -10,6 +10,7 @@ import cn.chitanda.kmmage.size.ScaleResolver
 import cn.chitanda.kmmage.size.SizeResolver
 import cn.chitanda.kmmage.target.Target
 import cn.chitanda.kmmage.transform.Transformation
+import cn.chitanda.kmmage.transition.Transition
 import io.ktor.http.Headers
 import io.ktor.http.HeadersBuilder
 import java.io.File
@@ -44,8 +45,11 @@ class ImageRequest private constructor(
     val tags: Tags,
     val parameters: Parameters,
     val allowConversionToBitmap: Boolean,
+    val lifecycle: Any,
+    val context: Any,
+    val transitionFactory: Transition.Factory,
 ) {
-
+    fun newBuilder(context: Any = this.context): Builder = Builder(this, context)
 
     interface Listener {
         /**
@@ -70,34 +74,64 @@ class ImageRequest private constructor(
     }
 
     class Builder {
-        constructor()
+        internal val context: Any
+        internal var data: Any?
+        internal var precision: Precision?
+        internal var bitmapConfig: ImageBitmapConfig?
+        internal var sizeResolver: SizeResolver?
+        internal var scaleResolver: ScaleResolver?
+        internal var memoryCacheKey: MemoryCache.Key?
+        internal var diskCacheKey: String?
+        internal var placeholderMemoryCacheKey: MemoryCache.Key?
+        internal var listener: Listener?
+        internal var defaults: DefaultRequestOptions = DefaultRequestOptions()
+        internal var target: Target?
+        internal var transformations: List<Transformation> = emptyList()
+        internal var allowHardware: Boolean?
+        internal var diskCachePolicy: CachePolicy?
+        internal var memoryCachePolicy: CachePolicy?
+        internal var networkCachePolicy: CachePolicy?
+        internal var allowRgb565: Boolean?
+        internal var scale: Scale?
+        internal var premultipliedAlpha: Boolean
+        internal var headers: HeadersBuilder?
+        internal var tags: MutableMap<Class<*>, Any>?
+        internal var parameters: Parameters.Builder?
+        internal var allowConversionToBitmap: Boolean
+        internal var lifecycle: Any?
+        internal var transitionFactory: Transition.Factory?
 
-        private var data: Any? = null
-        private var precision: Precision? = null
-        private var bitmapConfig: ImageBitmapConfig? = null
-        private var sizeResolver: SizeResolver? = null
-        private var scaleResolver: ScaleResolver? = null
-        private var memoryCacheKey: MemoryCache.Key? = null
-        private var diskCacheKey: String? = null
-        private var placeholderMemoryCacheKey: MemoryCache.Key? = null
-        private var listener: Listener? = null
-        private var options: DefaultRequestOptions = DefaultRequestOptions()
-        private var target: Target? = null
-        var transformations: List<Transformation> = emptyList()
-        var allowHardware: Boolean? = null
-        var diskCachePolicy: CachePolicy? = null
-        var memoryCachePolicy: CachePolicy? = null
-        var networkCachePolicy: CachePolicy? = null
-        var allowRgb565: Boolean? = null
-        var scale: Scale? = null
+        constructor(context: Any) {
+            this.context = context
+            data = null
+            precision = null
+            bitmapConfig = null
+            sizeResolver = null
+            scaleResolver = null
+            memoryCacheKey = null
+            diskCacheKey = null
+            placeholderMemoryCacheKey = null
+            listener = null
+            defaults = DefaultRequestOptions()
+            target = null
+            transformations = emptyList()
+            allowHardware = null
+            diskCachePolicy = null
+            memoryCachePolicy = null
+            networkCachePolicy = null
+            allowRgb565 = null
+            scale = null
+            premultipliedAlpha = true
+            headers = null
+            tags = null
+            parameters = null
+            allowConversionToBitmap = true
+            lifecycle = null
+            transitionFactory = null
+        }
 
-        var premultipliedAlpha: Boolean = true
-        var headers: HeadersBuilder? = null
-        var tags: MutableMap<Class<*>, Any>? = null
-        var parameters: Parameters.Builder? = null
-        var allowConversionToBitmap: Boolean = true
-
-        constructor(imageRequest: ImageRequest) {
+        constructor(imageRequest: ImageRequest, context: Any = imageRequest) {
+            this.context = context
             data = imageRequest.data
             precision = imageRequest.precision
             bitmapConfig = imageRequest.bitmapConfig
@@ -123,6 +157,9 @@ class ImageRequest private constructor(
             }
             tags = imageRequest.tags.asMap().toMutableMap()
             parameters = imageRequest.parameters.newBuilder()
+            allowConversionToBitmap = imageRequest.allowConversionToBitmap
+            lifecycle = imageRequest.lifecycle
+            transitionFactory = imageRequest.transitionFactory
         }
 
 
@@ -325,10 +362,15 @@ class ImageRequest private constructor(
             this.allowConversionToBitmap = true
         }
 
+        fun defaults(defaults: DefaultRequestOptions) = apply {
+            this.defaults = defaults
+        }
+
         fun build() = ImageRequest(
+            context = context,
             data = data ?: NullRequestData,
-            precision = precision ?: options.precision,
-            bitmapConfig = bitmapConfig ?: options.bitmapConfig,
+            precision = precision ?: defaults.precision,
+            bitmapConfig = bitmapConfig ?: defaults.bitmapConfig,
             sizeResolver = sizeResolver ?: DefaultSizeResolver,
             scaleResolver = scaleResolver ?: ScaleResolver(Scale.FIT),
             memoryCacheKey = memoryCacheKey,
@@ -337,18 +379,21 @@ class ImageRequest private constructor(
             placeholderMemoryCacheKey = placeholderMemoryCacheKey,
             listener = listener,
             transformations = transformations,
-            allowHardware = allowHardware ?: options.allowHardware,
-            diskCachePolicy = diskCachePolicy ?: options.diskCachePolicy,
-            memoryCachePolicy = memoryCachePolicy ?: options.memoryCachePolicy,
-            networkCachePolicy = networkCachePolicy ?: options.networkCachePolicy,
-            allowRgb565 = allowRgb565 ?: options.allowRgb565,
+            allowHardware = allowHardware ?: defaults.allowHardware,
+            diskCachePolicy = diskCachePolicy ?: defaults.diskCachePolicy,
+            memoryCachePolicy = memoryCachePolicy ?: defaults.memoryCachePolicy,
+            networkCachePolicy = networkCachePolicy ?: defaults.networkCachePolicy,
+            allowRgb565 = allowRgb565 ?: defaults.allowRgb565,
             scale = scale ?: Scale.FIT,
             premultipliedAlpha = premultipliedAlpha,
             headers = headers?.build() ?: Headers.Empty,
             tags = tags?.let { Tags.from(it) } ?: Tags.EMPTY,
             parameters = parameters?.build() ?: Parameters(),
-            allowConversionToBitmap = allowConversionToBitmap
+            allowConversionToBitmap = allowConversionToBitmap,
+            lifecycle = lifecycle ?: context.getLifecycle(),
+            transitionFactory = transitionFactory ?: defaults.transitionFactory
         )
+
     }
 
 }
@@ -359,3 +404,5 @@ object NullRequestData {
 
 internal expect val DEFAULT_REQUEST_OPTION: DefaultRequestOptions
 internal expect val DefaultSizeResolver: SizeResolver
+
+internal expect fun Any.getLifecycle(): Any

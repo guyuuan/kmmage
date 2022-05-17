@@ -11,5 +11,9 @@ fun interface Transition {
 
         fun create(target: Target, result: ImageResult): Transition
 
+        companion object {
+            @JvmStatic
+            val NONE: Factory = NoneTransition.Factory()
+        }
     }
 }

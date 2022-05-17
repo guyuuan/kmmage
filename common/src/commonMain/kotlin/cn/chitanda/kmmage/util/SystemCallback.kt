@@ -13,6 +13,11 @@ internal abstract class SystemCallback(
     isNetworkObserverEnabled: Boolean
 ) {
     internal val imageLoader = WeakReference(imageLoader)
-    abstract val isOnline:Boolean
-    abstract val isShutDown:Boolean
+    abstract val isOnline: Boolean
+    abstract val isShutDown: Boolean
 }
+
+internal expect fun SystemCallbacks(
+    imageLoader: RealImageLoader,
+    isNetworkObserverEnabled: Boolean
+): SystemCallback

@@ -27,3 +27,5 @@ internal val ImageRequest.allowInexactSize: Boolean
             return@run false
         }
     }
+
+internal expect suspend fun ImageRequest.awaitStart()

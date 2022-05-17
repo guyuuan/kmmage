@@ -12,3 +12,5 @@ private var windowBounds = 0 to 0
 fun updateWindowBounds(bounds: Pair<Int, Int>) {
     windowBounds = bounds
 }
+
+internal actual fun Any.getLifecycle():Any=Unit

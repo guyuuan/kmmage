@@ -8,7 +8,7 @@ import cn.chitanda.kmmage.size.pxOrElse
  * @createTime: 2022/5/13 15:03
  * @description:
  **/
-internal sealed class HardwareBitmapService {
+ internal sealed class HardwareBitmapService {
 
     /** Return 'true' if we are currently able to create [Bitmap.Config.HARDWARE]. */
     abstract fun allowHardwareMainThread(size: Size): Boolean
@@ -18,7 +18,7 @@ internal sealed class HardwareBitmapService {
 
 }
 
-internal expect fun HardwareBitmapService(): HardwareBitmapService
+internal expect fun HardwareBitmapServices(): HardwareBitmapService
 
 /** Returns a fixed value for [allowHardwareMainThread] and [allowHardwareWorkerThread]. */
 internal class ImmutableHardwareBitmapService(private val allowHardware: Boolean) :

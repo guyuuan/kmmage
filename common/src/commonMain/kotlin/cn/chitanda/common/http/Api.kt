@@ -1,9 +1,7 @@
 package cn.chitanda.common.http
 
-import cn.chitanda.common.KtorEngine
 import cn.chitanda.kmmage.ImageLoader
-import cn.chitanda.kmmage.request.ImageRequest
-import cn.chitanda.kmmage.request.Options
+import cn.chitanda.kmmage.KtorEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -24,10 +22,10 @@ object Api {
             client.get { url(address) }.body<String>().toString()
         }
 
-    suspend fun getImageBitmap(address: String) = withContext(Dispatchers.IO) {
-        imageLoader.request(
-            ImageRequest.Builder().data(address).build(),
-            options = Options()
-        ).bitmap
-    }
+//    suspend fun getImageBitmap(address: String) = withContext(Dispatchers.IO) {
+//        imageLoader.request(
+//            ImageRequest.Builder().data(address).build(),
+//            options = Options()
+//        ).bitmap
+//    }
 }

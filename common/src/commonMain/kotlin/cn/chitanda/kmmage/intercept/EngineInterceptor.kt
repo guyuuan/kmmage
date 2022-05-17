@@ -179,7 +179,7 @@ internal class EngineInterceptor(
         var searchIndex = 0
         while (true) {
             val pair = components.newFetcher(data, options, imageLoader, searchIndex)
-            checkNotNull(pair) { "Unable to create a fetcher that supports: $data" }
+            checkNotNull(pair) { "Unable to create a fetcher that supports: ${data.javaClass.name}" }
             val fetcher = pair.first
             searchIndex = pair.second + 1
 

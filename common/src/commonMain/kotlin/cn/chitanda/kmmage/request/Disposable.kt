@@ -12,3 +12,16 @@ interface Disposable {
     val isDisposed: Boolean
     fun dispose()
 }
+
+internal class OneShotDisposable(
+    override val job: Deferred<ImageResult>
+) : Disposable {
+
+    override val isDisposed: Boolean
+        get() = !job.isActive
+
+    override fun dispose() {
+        if (isDisposed) return
+        job.cancel()
+    }
+}

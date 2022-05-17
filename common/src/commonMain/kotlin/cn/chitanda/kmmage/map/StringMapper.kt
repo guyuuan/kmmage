@@ -10,7 +10,7 @@ import io.ktor.http.Url
  **/
 class StringMapper : Mapper<String, Url> {
     override fun map(data: String, options: Options): Url? {
-        if (isApplicable(data)) return null
+        if (!isApplicable(data)) return null
         return Url(data)
     }
 

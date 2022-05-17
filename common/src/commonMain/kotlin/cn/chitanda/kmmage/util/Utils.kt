@@ -7,6 +7,7 @@ import cn.chitanda.kmmage.disk.DiskCache
 import cn.chitanda.kmmage.fetch.Fetcher
 import cn.chitanda.kmmage.intercept.Interceptor
 import cn.chitanda.kmmage.intercept.RealInterceptorChain
+import cn.chitanda.kmmage.memory.MemoryCache
 import io.ktor.http.ContentType
 import java.io.Closeable
 
@@ -74,3 +75,5 @@ internal inline fun ComponentRegistry.Builder.addFirst(
 internal inline fun ComponentRegistry.Builder.addFirst(
     factory: Decoder.Factory?
 ) = apply { if (factory != null) decoderFactories.add(0, factory) }
+
+internal inline operator fun MemoryCache.get(key: MemoryCache.Key?) = key?.let(::get)

@@ -24,7 +24,7 @@ interface ImageLoader {
 
     fun enqueue(request: ImageRequest): Disposable
 
-    suspend fun request(request: ImageRequest, options: Options): ImageResult
+    suspend fun execute(request: ImageRequest, options: Options): ImageResult
 
     fun newBuilder(): Builder
     class Builder() {

@@ -18,16 +18,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import cn.chitanda.common.http.Api
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import cn.chitanda.kmmage.ImageLoader
+import cn.chitanda.kmmage.request.ImageRequest
+import cn.chitanda.kmmage.target.Target
 
+
+import cn.chitanda.kmmage.getPlatformName
 @Composable
 fun App() {
     val coroutineScope = rememberCoroutineScope()
     var text by remember { mutableStateOf("Hello, World!") }
 //    var html by remember { mutableStateOf("") }
     var image by remember { mutableStateOf<ImageBitmap?>(null) }
+    val imageLoader = remember { ImageLoader.Builder().build() }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column (horizontalAlignment = Alignment.CenterHorizontally){
             Box(modifier = Modifier.weight(1f)){
@@ -47,11 +50,25 @@ fun App() {
         }
         Button(onClick = {
             text = "Hello, ${getPlatformName()}"
-            coroutineScope.launch(Dispatchers.IO) {
+//            coroutineScope.launch(Dispatchers.IO) {
 //                html = Api.getWebHTML("https://www.bing.com")
-                image =
-                    Api.getImageBitmap("https://cdn.pixabay.com/photo/2022/03/01/20/58/peace-genius-7042013_1280.jpg")
-            }
+            imageLoader.enqueue(
+                ImageRequest.Builder(Unit)
+                    .data("https://cdn.pixabay.com/photo/2022/03/01/20/58/peace-genius-7042013_1280.jpg")
+                    .target(object : Target {
+                        override fun onStart(placeholder: ImageBitmap?) {
+                        }
+
+                        override fun onError(error: ImageBitmap?) {
+                        }
+                        override fun onSuccess(result: ImageBitmap) {
+                            image = result
+                        }
+                    }).build()
+            )
+//                image =
+//                    Api.getImageBitmap("https://cdn.pixabay.com/photo/2022/03/01/20/58/peace-genius-7042013_1280.jpg")
+//            }
         }) {
             Text(text)
         }

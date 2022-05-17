@@ -1,4 +1,4 @@
 package cn.chitanda.kmmage.util
 
-internal actual fun HardwareBitmapService(): HardwareBitmapService =
+internal actual fun HardwareBitmapServices(): HardwareBitmapService =
     ImmutableHardwareBitmapService(true)
