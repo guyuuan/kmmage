@@ -22,18 +22,20 @@ import io.ktor.client.request.request
 import io.ktor.client.request.takeFrom
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsChannel
 import io.ktor.client.statement.request
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
 import io.ktor.http.isSuccess
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.coroutines.cancel
 import okio.Closeable
 import okio.FileSystem
 import okio.IOException
 import okio.buffer
 import okio.source
-import java.io.ByteArrayInputStream
 import java.io.InputStream
 
 /**
@@ -50,7 +52,7 @@ internal class HttpUrlFetcher(
 ) : Fetcher {
     private val diskCacheKey get() = options.diskCacheKey ?: url.toString()
     private val fileSystem get() = diskCache.value!!.fileSystem
-    override suspend fun fetch(): FetchResult? {
+    override suspend fun fetch(): FetchResult {
         var snapshot = readFromDiskCache()
         try {
             val cacheStrategy: CacheStrategy
@@ -92,10 +94,9 @@ internal class HttpUrlFetcher(
                         dataSource = DataSource.NETWORK
                     )
                 }
-                var responseBody = response.body<ByteArray>()
-
+                var responseBody = response.bodyAsChannel()
                 // If we failed to read a new snapshot then read the response body if it's not empty.
-                if (responseBody.size > 0) {
+                if (responseBody.availableForRead > 0) {
                     return SourceResult(
                         source = responseBody.toImageSource(),
                         mimeType = response.headers[HttpHeaders.ContentType],
@@ -106,7 +107,7 @@ internal class HttpUrlFetcher(
                     // cache headers.
                     response.cancel()
                     response = executeNetworkRequest(HttpRequestBuilder().takeFrom(newRequest()))
-                    responseBody = response.body<ByteArray>()
+                    responseBody = response.bodyAsChannel()
 
                     return SourceResult(
                         source = responseBody.toImageSource(),
@@ -123,6 +124,17 @@ internal class HttpUrlFetcher(
             snapshot?.closeQuietly()
             throw  e
         }
+    }
+
+    private fun ByteReadChannel.toImageSource(): ImageSource {
+        return ImageSource(
+            toInputStream().source().buffer(),
+            FileSystem.SYSTEM_TEMPORARY_DIRECTORY.toFile()
+        )
+    }
+
+    private fun ByteReadChannel.toDataSource(): DataSource {
+        return if (this.availableForRead > 0) DataSource.NETWORK else DataSource.DISK
     }
 
     private suspend fun executeNetworkRequest(request: HttpRequestBuilder): HttpResponse {
@@ -227,18 +239,6 @@ internal class HttpUrlFetcher(
             null
         }
     }
-
-    private fun ByteArray.toImageSource(): ImageSource {
-        return ImageSource(
-            ByteArrayInputStream(this).source().buffer(),
-            FileSystem.SYSTEM_TEMPORARY_DIRECTORY.toFile()
-        )
-    }
-
-    private fun ByteArray.toDataSource(): DataSource {
-        return if (isEmpty()) DataSource.DISK else DataSource.NETWORK
-    }
-
 
     class Factory(
         private val ktorClient: HttpClient,

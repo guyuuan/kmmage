@@ -43,6 +43,7 @@ class DiskLruCache(
     private val journalFileTmp = directory / JOURNAL_FILE_TMP
     private val journalFileBackup = directory / JOURNAL_FILE_BACKUP
     private val lruEntries = LinkedHashMap<String, Entry>(0, 0.75f, true)
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val cleanUpScope =
         CoroutineScope(SupervisorJob() + cleanUpDispatcher.limitedParallelism(1))
     private var size = 0L
@@ -63,7 +64,7 @@ class DiskLruCache(
         }
     }
 
-    fun initialize() {
+    private fun initialize() {
         if (initialized) return
 
         // if journal.tmp exists ,delete it

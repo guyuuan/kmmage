@@ -3,7 +3,10 @@ package cn.chitanda.kmmage
 import androidx.compose.ui.graphics.ImageBitmap
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okio.BufferedSource
+import okio.Path
 
 /**
  * @author: Chen
@@ -15,4 +18,5 @@ expect fun getPlatformName(): String
 
 internal expect  fun buildComponentRegistry(componentRegistry: ComponentRegistry):ComponentRegistry
 internal expect val KtorEngine: HttpClientEngineFactory<HttpClientEngineConfig>
-internal expect fun BufferedSource.toImageBitmap(): ImageBitmap
+internal expect suspend fun BufferedSource.toImageBitmap(): ImageBitmap
+internal expect val PlatformMainDispatcher:CoroutineDispatcher

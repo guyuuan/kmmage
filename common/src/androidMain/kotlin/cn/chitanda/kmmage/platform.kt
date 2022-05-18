@@ -1,11 +1,12 @@
 package cn.chitanda.kmmage
 
 import android.graphics.BitmapFactory
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okio.BufferedSource
 
 /**
@@ -23,11 +24,9 @@ actual fun getPlatformName(): String {
 
 internal actual val KtorEngine: HttpClientEngineFactory<HttpClientEngineConfig> = CIO
 
-internal actual fun BufferedSource.toImageBitmap(): ImageBitmap {
+internal actual suspend fun BufferedSource.toImageBitmap() = runCatching {
+    BitmapFactory.decodeStream(peek().inputStream()).asImageBitmap()
+}.getOrElse { throw it }
 
-    return try {
-        BitmapFactory.decodeStream(buffer.inputStream()).asImageBitmap()
-    } catch (e: Exception) {
-        throw  e
-    }
-}
+
+internal actual val PlatformMainDispatcher: CoroutineDispatcher = Dispatchers.Main.immediate

@@ -84,9 +84,9 @@ class CacheStrategy private constructor(
             if (cacheResponse == null) {
                 return CacheStrategy(request.newBuilder(), null)
             }
-            if (request.url.protocol == URLProtocol.HTTPS) {
-                return CacheStrategy(request.newBuilder(), null)
-            }
+//            if (request.url.protocol == URLProtocol.HTTPS) {
+//                return CacheStrategy(request.newBuilder(), null)
+//            }
             val responseCaching = cacheResponse.cacheControl
             if (!isCacheable(request, cacheResponse)) {
                 return CacheStrategy(request.newBuilder(), null)

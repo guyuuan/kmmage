@@ -49,7 +49,7 @@ internal class RealImageLoader(
     val options: ImageLoaderOptions,
 ) : ImageLoader {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate +
+    private val scope = CoroutineScope(SupervisorJob() + PlatformMainDispatcher +
             CoroutineExceptionHandler { _, throwable -> println(throwable) })
     override val memoryCache by memoryCacheLazy
     override val diskCache by diskCacheLazy

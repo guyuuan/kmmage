@@ -9,14 +9,14 @@ import okio.FileSystem
  * @description:
  **/
 object SingletonDiskCache {
-    const val CACHE_FLODER = "kmmage/image_cache"
+    private const val CACHE_DIRECTORY = "kmmage/image_cache"
 
     private var instance: DiskCache? = null
 
     fun get(): DiskCache {
         return instance ?: synchronized(this) {
             instance ?: DiskCache.Builder().directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY.div(
-                CACHE_FLODER)).build()
+                CACHE_DIRECTORY)).build()
                 .also { instance = it }
         }
     }

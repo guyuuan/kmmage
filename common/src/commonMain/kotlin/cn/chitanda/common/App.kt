@@ -1,5 +1,6 @@
 package cn.chitanda.common
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,11 +20,10 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cn.chitanda.kmmage.ImageLoader
+import cn.chitanda.kmmage.getPlatformName
 import cn.chitanda.kmmage.request.ImageRequest
 import cn.chitanda.kmmage.target.Target
 
-
-import cn.chitanda.kmmage.getPlatformName
 @Composable
 fun App() {
     val coroutineScope = rememberCoroutineScope()
@@ -48,13 +48,12 @@ fun App() {
                 modifier = Modifier.padding(vertical = 20.dp)
             )
         }
+        var flag by remember { mutableStateOf(true) }
         Button(onClick = {
             text = "Hello, ${getPlatformName()}"
-//            coroutineScope.launch(Dispatchers.IO) {
-//                html = Api.getWebHTML("https://www.bing.com")
             imageLoader.enqueue(
                 ImageRequest.Builder(Unit)
-                    .data("https://cdn.pixabay.com/photo/2022/03/01/20/58/peace-genius-7042013_1280.jpg")
+                    .data(if (flag) "https://cdn.pixabay.com/photo/2022/03/01/20/58/peace-genius-7042013_1280.jpg" else "https://cdn.pixabay.com/photo/2022/05/11/15/53/flower-7189649_1280.jpg")
                     .target(object : Target {
                         override fun onStart(placeholder: ImageBitmap?) {
                         }
@@ -62,13 +61,11 @@ fun App() {
                         override fun onError(error: ImageBitmap?) {
                         }
                         override fun onSuccess(result: ImageBitmap) {
+                            flag =!flag
                             image = result
                         }
                     }).build()
             )
-//                image =
-//                    Api.getImageBitmap("https://cdn.pixabay.com/photo/2022/03/01/20/58/peace-genius-7042013_1280.jpg")
-//            }
         }) {
             Text(text)
         }
