@@ -1,6 +1,9 @@
 package cn.chitanda.kmmage
 
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import cn.chitanda.kmmage.disk.SingletonDiskCache
+import cn.chitanda.kmmage.memory.MemoryCache
+import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
@@ -30,5 +33,17 @@ internal actual suspend fun BufferedSource.toImageBitmap() = runCatching {
     throw it
 }
 
-
 internal actual val PlatformMainDispatcher: CoroutineDispatcher = Dispatchers.Default
+
+actual fun ImageLoader.Builder.build(): ImageLoader {
+    return RealImageLoader(
+        defaults = defaults,
+        memoryCacheLazy = memoryCache ?: lazy { MemoryCache.Builder().build() },
+        diskCacheLazy = diskCache ?: lazy { SingletonDiskCache.get() },
+        httpClientFactoryLazy = httpClientFactoryLazy ?: lazy { HttpClient() },
+        eventListenerFactory = eventListenerFactory ?: EventListener.Factory.NONE,
+        componentRegistry = componentRegistry ?: ComponentRegistry(),
+        options = options,
+        context =  Unit
+    )
+}

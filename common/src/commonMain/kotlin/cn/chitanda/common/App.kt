@@ -20,9 +20,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cn.chitanda.kmmage.ImageLoader
+import cn.chitanda.kmmage.build
 import cn.chitanda.kmmage.getPlatformName
 import cn.chitanda.kmmage.request.ImageRequest
 import cn.chitanda.kmmage.target.Target
+
 
 @Composable
 fun App() {

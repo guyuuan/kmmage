@@ -27,14 +27,15 @@ interface ImageLoader {
     suspend fun execute(request: ImageRequest, options: Options): ImageResult
 
     fun newBuilder(): Builder
-    class Builder() {
-        private var defaults: DefaultRequestOptions = DefaultRequestOptions()
-        private var memoryCache: Lazy<MemoryCache?>? = null
-        private var diskCache: Lazy<DiskCache?>? = null
-        private var httpClientFactoryLazy: Lazy<HttpClient>? = null
-        private var eventListenerFactory: EventListener.Factory? = null
-        private var componentRegistry: ComponentRegistry? = null
-        private var options: ImageLoaderOptions = ImageLoaderOptions()
+    class Builder internal constructor() {
+        internal var defaults: DefaultRequestOptions = DefaultRequestOptions()
+        internal var memoryCache: Lazy<MemoryCache?>? = null
+        internal var diskCache: Lazy<DiskCache?>? = null
+        internal var httpClientFactoryLazy: Lazy<HttpClient>? = null
+        internal var eventListenerFactory: EventListener.Factory? = null
+        internal var componentRegistry: ComponentRegistry? = null
+        internal var options: ImageLoaderOptions = ImageLoaderOptions()
+        internal var context: Any? = null
 
         internal constructor(imageLoader: RealImageLoader) : this() {
             defaults = imageLoader.defaults
@@ -46,15 +47,8 @@ interface ImageLoader {
             options = imageLoader.options
         }
 
-        fun build(): ImageLoader = RealImageLoader(
-            defaults = defaults,
-            memoryCacheLazy = memoryCache ?: lazy { MemoryCache.Builder().build() },
-            diskCacheLazy = diskCache ?: lazy { SingletonDiskCache.get() },
-            httpClientFactoryLazy = httpClientFactoryLazy ?: lazy { HttpClient() },
-            eventListenerFactory = eventListenerFactory ?: EventListener.Factory.NONE,
-            componentRegistry = componentRegistry ?: ComponentRegistry(),
-            options = options
-        )
-
     }
+
 }
+
+expect fun ImageLoader.Builder.build():ImageLoader

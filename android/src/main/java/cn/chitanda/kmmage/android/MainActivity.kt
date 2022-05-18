@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import cn.chitanda.kmmage.ImageLoader
+import cn.chitanda.kmmage.compose.LocalImageLoader
 import cn.chitanda.kmmage.getPlatformName
 import cn.chitanda.kmmage.request.ImageRequest
 import cn.chitanda.kmmage.target.Target
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
             MaterialTheme {
                 var text by remember { mutableStateOf("Hello, World!") }
                 var image by remember { mutableStateOf<ImageBitmap?>(null) }
-                val imageLoader = remember { ImageLoader.Builder().build() }
+                val imageLoader = LocalImageLoader.current
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Box(modifier = Modifier.weight(1f)) {

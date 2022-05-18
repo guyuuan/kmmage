@@ -1,7 +1,9 @@
 package cn.chitanda.kmmage.util
 
 import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
+import cn.chitanda.kmmage.ImageLoader
 
 /**
  * @author: Chen
@@ -15,3 +17,5 @@ internal val Uri.firstPathSegment: String?
 internal fun isAssetUri(uri: Uri): Boolean {
     return uri.scheme == ContentResolver.SCHEME_FILE && uri.firstPathSegment == ASSET_FILE_PATH_ROOT
 }
+
+fun ImageLoaderBuilder(context: Context) = ImageLoader.Builder().apply { this.context = context }
