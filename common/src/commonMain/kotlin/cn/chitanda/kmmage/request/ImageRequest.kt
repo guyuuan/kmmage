@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.ImageBitmapConfig
 import cn.chitanda.kmmage.memory.MemoryCache
 import cn.chitanda.kmmage.size.Precision
 import cn.chitanda.kmmage.size.Scale
-import cn.chitanda.kmmage.size.ScaleResolver
 import cn.chitanda.kmmage.size.SizeResolver
 import cn.chitanda.kmmage.target.Target
 import cn.chitanda.kmmage.transform.Transformation
@@ -27,11 +26,11 @@ class ImageRequest private constructor(
     val precision: Precision,
     val bitmapConfig: ImageBitmapConfig,
     val sizeResolver: SizeResolver,
-    val scaleResolver: ScaleResolver,
     val memoryCacheKey: MemoryCache.Key?,
     val diskCacheKey: String?,
     val target: Target?,
     val placeholderMemoryCacheKey: MemoryCache.Key?,
+    val placeholder: ImageBitmap?,
     val listener: Listener?,
     val transformations: List<Transformation>,
     val allowHardware: Boolean,
@@ -48,6 +47,7 @@ class ImageRequest private constructor(
     val lifecycle: Any,
     val context: Any,
     val transitionFactory: Transition.Factory,
+    val raw: RawRequestOptions
 ) {
     fun newBuilder(context: Any = this.context): Builder = Builder(this, context)
 
@@ -73,70 +73,39 @@ class ImageRequest private constructor(
         fun onSuccess(request: ImageRequest, result: SuccessResult)
     }
 
-    class Builder {
-        internal val context: Any
-        internal var data: Any?
-        internal var precision: Precision?
-        internal var bitmapConfig: ImageBitmapConfig?
-        internal var sizeResolver: SizeResolver?
-        internal var scaleResolver: ScaleResolver?
-        internal var memoryCacheKey: MemoryCache.Key?
-        internal var diskCacheKey: String?
-        internal var placeholderMemoryCacheKey: MemoryCache.Key?
-        internal var listener: Listener?
+    class Builder internal constructor(context: Any){
+        internal val context: Any = context
+        internal var data: Any? =null
+        internal var precision: Precision? = null
+        internal var bitmapConfig: ImageBitmapConfig? = null
+        internal var sizeResolver: SizeResolver? = null
+        internal var memoryCacheKey: MemoryCache.Key? = null
+        internal var diskCacheKey: String? = null
+        internal var placeholderMemoryCacheKey: MemoryCache.Key? = null
+        internal var listener: Listener? = null
         internal var defaults: DefaultRequestOptions = DefaultRequestOptions()
-        internal var target: Target?
+        internal var target: Target? = null
         internal var transformations: List<Transformation> = emptyList()
-        internal var allowHardware: Boolean?
-        internal var diskCachePolicy: CachePolicy?
-        internal var memoryCachePolicy: CachePolicy?
-        internal var networkCachePolicy: CachePolicy?
-        internal var allowRgb565: Boolean?
-        internal var scale: Scale?
-        internal var premultipliedAlpha: Boolean
-        internal var headers: HeadersBuilder?
-        internal var tags: MutableMap<Class<*>, Any>?
-        internal var parameters: Parameters.Builder?
-        internal var allowConversionToBitmap: Boolean
-        internal var lifecycle: Any?
-        internal var transitionFactory: Transition.Factory?
+        internal var allowHardware: Boolean? = null
+        internal var diskCachePolicy: CachePolicy? = null
+        internal var memoryCachePolicy: CachePolicy? = null
+        internal var networkCachePolicy: CachePolicy?  = null
+        internal var allowRgb565: Boolean?= null
+        internal var scale: Scale?= null
+        internal var premultipliedAlpha: Boolean = true
+        internal var headers: HeadersBuilder? = null
+        internal var tags: MutableMap<Class<*>, Any>? = null
+        internal var parameters: Parameters.Builder? = null
+        internal var allowConversionToBitmap: Boolean =true
+        internal var lifecycle: Any? = null
+        internal var transitionFactory: Transition.Factory? =null
+        internal var placeholder: ImageBitmap? = null
 
-        constructor(context: Any) {
-            this.context = context
-            data = null
-            precision = null
-            bitmapConfig = null
-            sizeResolver = null
-            scaleResolver = null
-            memoryCacheKey = null
-            diskCacheKey = null
-            placeholderMemoryCacheKey = null
-            listener = null
-            defaults = DefaultRequestOptions()
-            target = null
-            transformations = emptyList()
-            allowHardware = null
-            diskCachePolicy = null
-            memoryCachePolicy = null
-            networkCachePolicy = null
-            allowRgb565 = null
-            scale = null
-            premultipliedAlpha = true
-            headers = null
-            tags = null
-            parameters = null
-            allowConversionToBitmap = true
-            lifecycle = null
-            transitionFactory = null
-        }
-
-        constructor(imageRequest: ImageRequest, context: Any = imageRequest) {
-            this.context = context
+        constructor(imageRequest: ImageRequest, context: Any = imageRequest):this(context){
             data = imageRequest.data
             precision = imageRequest.precision
             bitmapConfig = imageRequest.bitmapConfig
             sizeResolver = imageRequest.sizeResolver
-            scaleResolver = imageRequest.scaleResolver
             memoryCacheKey = imageRequest.memoryCacheKey
             diskCacheKey = imageRequest.diskCacheKey
             placeholderMemoryCacheKey = imageRequest.placeholderMemoryCacheKey
@@ -196,12 +165,12 @@ class ImageRequest private constructor(
             this.bitmapConfig = bitmapConfig
         }
 
-        fun sizeResolver(sizeResolver: SizeResolver) = apply {
+        fun size(sizeResolver: SizeResolver) = apply {
             this.sizeResolver = sizeResolver
         }
 
-        fun scaleResovler(scaleResolver: ScaleResolver) = apply {
-            this.scaleResolver = scaleResolver
+        fun scale(scale: Scale) = apply {
+            this.scale = scale
         }
 
         fun memoryCacheKey(key: String?) = memoryCacheKey(key?.let { MemoryCache.Key(it) })
@@ -366,13 +335,14 @@ class ImageRequest private constructor(
             this.defaults = defaults
         }
 
+        fun placeholder(placeholder: ImageBitmap) = apply { this.placeholder = placeholder }
+
         fun build() = ImageRequest(
             context = context,
             data = data ?: NullRequestData,
             precision = precision ?: defaults.precision,
             bitmapConfig = bitmapConfig ?: defaults.bitmapConfig,
             sizeResolver = sizeResolver ?: DefaultSizeResolver,
-            scaleResolver = scaleResolver ?: ScaleResolver(Scale.FIT),
             memoryCacheKey = memoryCacheKey,
             diskCacheKey = diskCacheKey,
             target = target,
@@ -391,7 +361,20 @@ class ImageRequest private constructor(
             parameters = parameters?.build() ?: Parameters(),
             allowConversionToBitmap = allowConversionToBitmap,
             lifecycle = lifecycle ?: context.getLifecycle(),
-            transitionFactory = transitionFactory ?: defaults.transitionFactory
+            transitionFactory = transitionFactory ?: defaults.transitionFactory,
+            placeholder = placeholder,
+            raw = RawRequestOptions(
+                sizeResolver = sizeResolver,
+                scale = scale,
+                transitionFactory = transitionFactory,
+                precision = precision,
+                bitmapConfig = bitmapConfig,
+                allowRgb565 = allowRgb565,
+                allowHardware = allowHardware,
+                memoryCachePolicy = memoryCachePolicy,
+                diskCachePolicy = diskCachePolicy,
+                networkCachePolicy = networkCachePolicy
+            )
         )
 
     }

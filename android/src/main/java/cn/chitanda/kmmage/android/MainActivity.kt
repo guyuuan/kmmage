@@ -25,6 +25,7 @@ import cn.chitanda.kmmage.compose.LocalImageLoader
 import cn.chitanda.kmmage.getPlatformName
 import cn.chitanda.kmmage.request.ImageRequest
 import cn.chitanda.kmmage.target.Target
+import cn.chitanda.kmmage.util.ImageRequestBuilder
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                     Button(onClick = {
                         text = "Hello, ${getPlatformName()}"
                         imageLoader.enqueue(
-                            ImageRequest.Builder(this@MainActivity)
+                            ImageRequestBuilder(this@MainActivity)
                                 .data(
                                     if (flag) "https://cdn.pixabay.com/photo/2022/03/01/20/58/peace-genius-7042013_1280.jpg"
                                     else "https://cdn.pixabay.com/photo/2022/05/11/15/53/flower-7189649_1280.jpg"

@@ -13,8 +13,8 @@ import cn.chitanda.kmmage.request.ErrorResult
 import cn.chitanda.kmmage.request.ImageRequest
 import cn.chitanda.kmmage.request.ImageResult
 import cn.chitanda.kmmage.request.NullRequestData
+import cn.chitanda.kmmage.request.NullRequestDataException
 import cn.chitanda.kmmage.request.OneShotDisposable
-import cn.chitanda.kmmage.request.Options
 import cn.chitanda.kmmage.request.RequestService
 import cn.chitanda.kmmage.request.SuccessResult
 import cn.chitanda.kmmage.target.Target
@@ -76,7 +76,7 @@ internal class RealImageLoader(
         return OneShotDisposable(job)
     }
 
-    override suspend fun execute(request: ImageRequest, options: Options): ImageResult {
+    override suspend fun execute(request: ImageRequest): ImageResult {
         val job = scope.async {
             executeMain(request, REQUEST_TYPE_ENQUEUE)
         }
@@ -90,7 +90,7 @@ internal class RealImageLoader(
         val request = initialRequest.newBuilder().defaults(defaults).build()
         val eventListener = eventListenerFactory.create(request)
         try {
-            if (request.data == NullRequestData) throw  RuntimeException("The request's data is null.")
+            if (request.data == NullRequestData) throw  NullRequestDataException()
             if (type == REQUEST_TYPE_ENQUEUE) request.awaitStart()
             val placeholder = memoryCache?.get(request.placeholderMemoryCacheKey)?.bitmap
             request.target?.onStart(placeholder)

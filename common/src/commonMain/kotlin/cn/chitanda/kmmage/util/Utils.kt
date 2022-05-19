@@ -1,5 +1,9 @@
 package cn.chitanda.kmmage.util
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.Stable
+import androidx.compose.ui.layout.ContentScale
 import cn.chitanda.kmmage.ComponentRegistry
 import cn.chitanda.kmmage.EventListener
 import cn.chitanda.kmmage.decode.Decoder
@@ -8,6 +12,8 @@ import cn.chitanda.kmmage.fetch.Fetcher
 import cn.chitanda.kmmage.intercept.Interceptor
 import cn.chitanda.kmmage.intercept.RealInterceptorChain
 import cn.chitanda.kmmage.memory.MemoryCache
+import cn.chitanda.kmmage.request.ImageRequest
+import cn.chitanda.kmmage.size.Scale
 import io.ktor.http.ContentType
 import java.io.Closeable
 
@@ -77,3 +83,12 @@ internal inline fun ComponentRegistry.Builder.addFirst(
 ) = apply { if (factory != null) decoderFactories.add(0, factory) }
 
 internal inline operator fun MemoryCache.get(key: MemoryCache.Key?) = key?.let(::get)
+@Stable
+internal fun ContentScale.toScale() = when (this) {
+    ContentScale.Fit, ContentScale.Inside -> Scale.FIT
+    else -> Scale.FILL
+}
+
+@Composable
+@ReadOnlyComposable
+internal expect fun requestOf(data: Any?): ImageRequest
