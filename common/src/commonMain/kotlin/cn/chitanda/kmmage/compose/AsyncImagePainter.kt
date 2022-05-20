@@ -204,7 +204,7 @@ class AsyncImagePainter(request: ImageRequest, imageLoader: ImageLoader) : Paint
 
         scope.launch {
             snapshotFlow { request }.mapLatest {
-                imageLoader.execute(updateRequest(request)).toState()
+                imageLoader.execute(updateRequest(request)).toState().also { println("ASYNC STATE $it") }
             }.collect(::updateState)
         }
     }
@@ -232,7 +232,7 @@ class AsyncImagePainter(request: ImageRequest, imageLoader: ImageLoader) : Paint
                     scale(contentScale.toScale())
                 }
                 if (request.raw.precision != Precision.EXACT) {
-                    precision(Precision.EXACT)
+                    precision(Precision.INEXACT)
                 }
             }
             .build()

@@ -16,6 +16,6 @@ internal actual fun requestOf(data: Any?): ImageRequest {
     return if (data is ImageRequest) {
         data
     } else {
-        ImageRequestBuilder().build()
+        ImageRequestBuilder().data(data).build()
     }
 }

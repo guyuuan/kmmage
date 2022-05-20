@@ -1,11 +1,13 @@
 package cn.chitanda.kmmage.compose
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.FilterQuality
@@ -39,10 +41,41 @@ import cn.chitanda.kmmage.size.Size as KmmageSize
  * @description:
  **/
 @Composable
-fun AsnyncImage(
+fun AsyncImage(
     data: Any?,
     contentDescription: String?,
-    imageLoader: ImageLoader,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    modifier: Modifier = Modifier,
+    placeholder: Painter? = null,
+    error: Painter? = null,
+    fallback: Painter? = error,
+    onLoading: ((State.Loading) -> Unit)? = null,
+    onSuccess: ((State.Success) -> Unit)? = null,
+    onError: ((State.Error) -> Unit)? = null,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+) = AsyncImage(
+    data = data,
+    contentDescription = contentDescription,
+    imageLoader = imageLoader,
+    modifier = modifier,
+    transform = transformOf(placeholder, error, fallback),
+    onState = onStateOf(onLoading, onSuccess, onError),
+    alignment = alignment,
+    contentScale = contentScale,
+    alpha = alpha,
+    colorFilter = colorFilter,
+    filterQuality = filterQuality
+)
+
+@Composable
+fun AsyncImage(
+    data: Any?,
+    contentDescription: String?,
+    imageLoader: ImageLoader= LocalImageLoader.current,
     modifier: Modifier,
     transform: (State) -> State = DefaultTransform,
     onState: ((State) -> Unit)? = null,
@@ -72,7 +105,7 @@ fun AsnyncImage(
 }
 
 @Composable
-internal   fun Content(
+internal fun Content(
     modifier: Modifier,
     painter: Painter,
     contentDescription: String?,
@@ -80,7 +113,7 @@ internal   fun Content(
     contentScale: ContentScale,
     alpha: Float,
     colorFilter: ColorFilter?
-)=Layout(
+) = Layout(
     modifier = modifier
         .contentDescription(contentDescription)
         .clipToBounds()
