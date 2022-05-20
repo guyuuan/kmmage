@@ -31,6 +31,6 @@ internal actual fun requestOf(data: Any?): ImageRequest {
     return if (data is ImageRequest) {
         data
     } else {
-        ImageRequestBuilder(LocalContext.current).build()
+        ImageRequestBuilder(LocalContext.current).data(data).build()
     }
 }
