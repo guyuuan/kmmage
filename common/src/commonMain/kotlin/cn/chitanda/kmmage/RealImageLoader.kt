@@ -5,6 +5,7 @@ import cn.chitanda.kmmage.disk.DiskCache
 import cn.chitanda.kmmage.fetch.HttpUrlFetcher
 import cn.chitanda.kmmage.intercept.EngineInterceptor
 import cn.chitanda.kmmage.intercept.RealInterceptorChain
+import cn.chitanda.kmmage.key.UrlKeyer
 import cn.chitanda.kmmage.map.StringMapper
 import cn.chitanda.kmmage.memory.MemoryCache
 import cn.chitanda.kmmage.request.DefaultRequestOptions
@@ -56,6 +57,7 @@ internal class RealImageLoader(
     override val diskCache by diskCacheLazy
     override val components = componentRegistry.newBuilder()
         .add(StringMapper())
+        .add(UrlKeyer())
         .add(BaseBitmapDecoder.Factory())
         .add(
         HttpUrlFetcher.Factory(

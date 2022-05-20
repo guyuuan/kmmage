@@ -1,7 +1,6 @@
 package cn.chitanda.kmmage.android
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -23,8 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cn.chitanda.kmmage.compose.LocalImageLoader
 import cn.chitanda.kmmage.getPlatformName
-import cn.chitanda.kmmage.request.ImageRequest
-import cn.chitanda.kmmage.target.Target
 import cn.chitanda.kmmage.util.ImageRequestBuilder
 
 private const val TAG = "MainActivity"
@@ -62,18 +59,9 @@ class MainActivity : AppCompatActivity() {
                                     if (flag) "https://cdn.pixabay.com/photo/2022/03/01/20/58/peace-genius-7042013_1280.jpg"
                                     else "https://cdn.pixabay.com/photo/2022/05/11/15/53/flower-7189649_1280.jpg"
                                 )
-                                .target(object : Target {
-                                    override fun onStart(placeholder: ImageBitmap?) {
-                                    }
-
-                                    override fun onError(error: ImageBitmap?) {
-                                        Log.d(TAG, "onError: ")
-                                    }
-
-                                    override fun onSuccess(result: ImageBitmap) {
-                                        image = result
-                                        flag = !flag
-                                    }
+                                .target(onSuccess = { result ->
+                                    image = result
+                                    flag = !flag
                                 }).build()
                         )
                 }) {
