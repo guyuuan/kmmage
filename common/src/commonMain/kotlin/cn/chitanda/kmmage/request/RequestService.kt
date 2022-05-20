@@ -56,7 +56,8 @@ internal class RequestService(
             parameters = request.parameters,
             memoryCachePolicy = request.memoryCachePolicy,
             diskCachePolicy = request.diskCachePolicy,
-            networkCachePolicy = networkCachePolicy
+            networkCachePolicy = networkCachePolicy,
+            context = request.context
         )
     }
 

@@ -52,7 +52,6 @@ internal data class ContentPainterModifier(
         )
         translate(dx.toFloat(), dy.toFloat()) {
             with(painter) {
-                println("PAINTER $painter")
                 draw(scaledSize, alpha, colorFilter)
             }
         }

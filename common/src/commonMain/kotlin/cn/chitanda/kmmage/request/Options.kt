@@ -1,6 +1,7 @@
 package cn.chitanda.kmmage.request
 
 import androidx.compose.ui.graphics.ImageBitmapConfig
+import androidx.compose.ui.graphics.colorspace.ColorSpace
 import cn.chitanda.kmmage.size.Scale
 import cn.chitanda.kmmage.size.Size
 import io.ktor.http.Headers
@@ -89,4 +90,13 @@ data class Options(
      * Determines if this request is allowed to read from the network.
      */
     val networkCachePolicy: CachePolicy = CachePolicy.ENABLED,
+
+
+    /**
+     * The preferred color space for any [ImageBitmap]s.
+     * If 'null', components should typically default to [ColorSpace.Rgb].
+     */
+    val colorSpace: ColorSpace? = null,
+
+    val context:Any
 )

@@ -8,6 +8,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalContext
 import cn.chitanda.kmmage.ImageLoader
 import cn.chitanda.kmmage.request.ImageRequest
+import cn.chitanda.kmmage.request.Options
 
 /**
  * @author: Chen
@@ -31,6 +32,16 @@ internal actual fun requestOf(data: Any?): ImageRequest {
     return if (data is ImageRequest) {
         data
     } else {
-        ImageRequestBuilder(LocalContext.current).data(data).build()
+        ImageRequestBuilder().data(data).build()
     }
+}
+
+@ReadOnlyComposable
+@Composable
+actual fun ImageRequestBuilder(): ImageRequest.Builder = ImageRequestBuilder(LocalContext.current)
+
+val Options.androidContext :Context
+get() {
+    check(context is Context){" Android Options context must is android.content.Context"}
+    return context
 }

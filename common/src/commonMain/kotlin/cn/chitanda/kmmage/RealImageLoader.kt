@@ -60,12 +60,12 @@ internal class RealImageLoader(
         .add(UrlKeyer())
         .add(BaseBitmapDecoder.Factory())
         .add(
-        HttpUrlFetcher.Factory(
-            HttpClient(KtorEngine),
-            diskCacheLazy,
-            options.respectCacheHeaders
-        )
-    ).build()
+            HttpUrlFetcher.Factory(
+                HttpClient(KtorEngine),
+                diskCacheLazy,
+                options.respectCacheHeaders
+            )
+        ).build().addPlatformComponentRegistry()
     private val systemCallbacks = SystemCallbacks(this, options.networkObserverEnabled)
     private val requestService = RequestService(this, systemCallbacks)
     private val interceptors = components.interceptors +

@@ -17,8 +17,8 @@ import org.jetbrains.skia.Image
  * @createTime: 2022/5/13 09:57
  * @description:
  **/
-internal actual fun buildComponentRegistry(componentRegistry: ComponentRegistry): ComponentRegistry {
-    return componentRegistry.newBuilder().build()
+internal actual fun ComponentRegistry.addPlatformComponentRegistry(): ComponentRegistry {
+    return this
 }
 
 actual fun getPlatformName(): String {

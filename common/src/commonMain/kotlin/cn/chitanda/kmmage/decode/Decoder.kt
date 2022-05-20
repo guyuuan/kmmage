@@ -13,6 +13,6 @@ interface Decoder {
     suspend fun decode(): DecodeResult?
 
     interface Factory {
-        fun create(source: SourceResult, options: Options, imageLoader: ImageLoader): Decoder?
+        fun create(result: SourceResult, options: Options, imageLoader: ImageLoader): Decoder?
     }
 }

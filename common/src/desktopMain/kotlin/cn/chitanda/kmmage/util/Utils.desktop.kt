@@ -19,3 +19,7 @@ internal actual fun requestOf(data: Any?): ImageRequest {
         ImageRequestBuilder().data(data).build()
     }
 }
+
+@ReadOnlyComposable
+@Composable
+actual fun ImageRequestBuilder(): ImageRequest.Builder=  ImageRequest.Builder(Unit)

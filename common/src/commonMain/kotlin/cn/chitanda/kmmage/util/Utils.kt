@@ -18,10 +18,13 @@ import cn.chitanda.kmmage.intercept.Interceptor
 import cn.chitanda.kmmage.intercept.RealInterceptorChain
 import cn.chitanda.kmmage.memory.MemoryCache
 import cn.chitanda.kmmage.request.ImageRequest
+import cn.chitanda.kmmage.size.Dimension
 import cn.chitanda.kmmage.size.Scale
+import cn.chitanda.kmmage.size.pxOrElse
 import io.ktor.http.ContentType
 import java.io.Closeable
 import kotlin.math.roundToInt
+import cn.chitanda.kmmage.size.Size as KmmageSize
 
 /**
  * @author: Chen
@@ -112,3 +115,22 @@ internal fun Size.toIntSize() = IntSize(width.roundToInt(), height.roundToInt())
 @Stable
 operator fun Size.times(scaleFactor: ScaleFactor): Size =
     Size(this.width * scaleFactor.scaleX, this.height * scaleFactor.scaleY)
+
+@Composable
+@ReadOnlyComposable
+expect fun ImageRequestBuilder():ImageRequest.Builder
+
+internal inline fun KmmageSize.widthPx(scale: Scale, original: () -> Int): Int {
+    return if (isOriginal) original() else width.toPx(scale)
+}
+
+internal inline fun KmmageSize.heightPx(scale: Scale, original: () -> Int): Int {
+    return if (isOriginal) original() else height.toPx(scale)
+}
+
+internal fun Dimension.toPx(scale: Scale) = pxOrElse {
+    when (scale) {
+        Scale.FILL -> Int.MIN_VALUE
+        Scale.FIT -> Int.MAX_VALUE
+    }
+}

@@ -16,7 +16,7 @@ import okio.Path
 
 expect fun getPlatformName(): String
 
-internal expect  fun buildComponentRegistry(componentRegistry: ComponentRegistry):ComponentRegistry
+internal expect  fun ComponentRegistry.addPlatformComponentRegistry():ComponentRegistry
 internal expect val KtorEngine: HttpClientEngineFactory<HttpClientEngineConfig>
 internal expect suspend fun BufferedSource.toImageBitmap(): ImageBitmap
 internal expect val PlatformMainDispatcher:CoroutineDispatcher

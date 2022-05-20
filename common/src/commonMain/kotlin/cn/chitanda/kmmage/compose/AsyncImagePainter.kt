@@ -34,6 +34,7 @@ import cn.chitanda.kmmage.size.Precision
 import cn.chitanda.kmmage.util.requestOf
 import cn.chitanda.kmmage.util.toScale
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -204,7 +205,7 @@ class AsyncImagePainter(request: ImageRequest, imageLoader: ImageLoader) : Paint
 
         scope.launch {
             snapshotFlow { request }.mapLatest {
-                imageLoader.execute(updateRequest(request)).toState().also { println("ASYNC STATE $it") }
+                imageLoader.execute(updateRequest(it)).toState().also { println("ASYNC STATE $it") }
             }.collect(::updateState)
         }
     }

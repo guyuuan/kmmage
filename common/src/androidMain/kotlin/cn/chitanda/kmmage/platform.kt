@@ -3,8 +3,10 @@ package cn.chitanda.kmmage
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
+import cn.chitanda.kmmage.decode.BitmapFactoryDecoder
 import cn.chitanda.kmmage.disk.SingletonDiskCache
 import cn.chitanda.kmmage.memory.MemoryCache
+import cn.chitanda.kmmage.util.addFirst
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
@@ -18,8 +20,8 @@ import okio.BufferedSource
  * @createTime: 2022/5/13 09:57
  * @description:
  **/
-internal actual fun buildComponentRegistry(componentRegistry: ComponentRegistry): ComponentRegistry {
-    return componentRegistry.newBuilder().build()
+internal actual fun ComponentRegistry.addPlatformComponentRegistry(): ComponentRegistry {
+    return newBuilder().addFirst(BitmapFactoryDecoder.Factory()).build()
 }
 
 actual fun getPlatformName(): String {

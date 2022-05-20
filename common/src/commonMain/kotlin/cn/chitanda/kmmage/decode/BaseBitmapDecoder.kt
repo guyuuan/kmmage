@@ -4,8 +4,6 @@ import cn.chitanda.kmmage.ImageLoader
 import cn.chitanda.kmmage.fetch.SourceResult
 import cn.chitanda.kmmage.request.Options
 import cn.chitanda.kmmage.toImageBitmap
-import io.ktor.utils.io.makeShared
-import okio.BufferedSource
 import okio.buffer
 import okio.source
 
@@ -22,12 +20,12 @@ class BaseBitmapDecoder(private val source: ImageSource) : Decoder {
 
     class Factory : Decoder.Factory {
         override fun create(
-            source: SourceResult,
+            result: SourceResult,
             options: Options,
             imageLoader: ImageLoader
         ): Decoder {
-            println("data source type = ${source.dataSource}")
-            return BaseBitmapDecoder(source.source)
+            println("data source type = ${result.dataSource}")
+            return BaseBitmapDecoder(result.source)
         }
     }
 }
