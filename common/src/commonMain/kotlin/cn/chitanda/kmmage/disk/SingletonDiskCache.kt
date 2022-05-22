@@ -1,7 +1,7 @@
 package cn.chitanda.kmmage.disk
 
 import okio.FileSystem
-import java.io.File
+import okio.Path
 
 
 /**
@@ -10,7 +10,7 @@ import java.io.File
  * @description:
  **/
 object SingletonDiskCache {
-    internal  val CACHE_DIRECTORY = "kmmage"+ File.separator+"image_cache"
+    internal  val CACHE_DIRECTORY = "kmmage"+ Path.DIRECTORY_SEPARATOR +"image_cache"
 
     private var instance: DiskCache? = null
 
