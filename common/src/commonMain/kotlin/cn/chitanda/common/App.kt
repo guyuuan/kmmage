@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cn.chitanda.kmmage.compose.AsyncImage
+import cn.chitanda.kmmage.disk.SingletonDiskCache
 import cn.chitanda.kmmage.getPlatformName
 
 
@@ -36,7 +37,7 @@ fun App() {
                 )
             }
             Text(
-                "tmpdir = ${System.getProperty("java.io.tmpdir")}/kmmage/image_cache/ ",
+                "tmpdir = ${SingletonDiskCache.get().directory}",
                 modifier = Modifier.padding(vertical = 20.dp)
             )
         }
