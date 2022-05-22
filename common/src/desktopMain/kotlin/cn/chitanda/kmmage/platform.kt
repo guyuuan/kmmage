@@ -9,6 +9,7 @@ import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.swing.Swing
 import okio.BufferedSource
 import org.jetbrains.skia.Image
 
@@ -33,7 +34,7 @@ internal actual suspend fun BufferedSource.toImageBitmap() = runCatching {
     throw it
 }
 
-internal actual val PlatformMainDispatcher: CoroutineDispatcher = Dispatchers.Default
+internal actual val PlatformMainDispatcher: CoroutineDispatcher = Dispatchers.Swing.immediate
 
 actual fun ImageLoader.Builder.build(): ImageLoader {
     return RealImageLoader(

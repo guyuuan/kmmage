@@ -6,6 +6,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCompositionContext
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.geometry.Size
@@ -205,7 +206,7 @@ class AsyncImagePainter(request: ImageRequest, imageLoader: ImageLoader) : Paint
 
         scope.launch {
             snapshotFlow { request }.mapLatest {
-                imageLoader.execute(updateRequest(it)).toState().also { println("ASYNC STATE $it") }
+                imageLoader.execute(updateRequest(it)).toState()
             }.collect(::updateState)
         }
     }

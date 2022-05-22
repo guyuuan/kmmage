@@ -52,6 +52,7 @@ kotlin {
                 implementation(libs.ktor.core)
                 implementation(libs.ktor.cio)
                 implementation(libs.thumbnailator)
+                implementation(libs.coroutines.swing)
             }
         }
         val desktopTest by getting
